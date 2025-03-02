@@ -55,7 +55,7 @@ public abstract class PokemonInfo {
 		lore.add(Component.translatable("cobblemon.ui.info.type").setStyle(dark_green).append(":").append(types));
 
 		lore.add(Component.translatable("cobblemon.ui.info.nature").setStyle(dark_green).append(": ")
-				.append(Component.translatable(pokemon.getNature().getDisplayName()).setStyle(green)));
+				.append(Component.translatable(pokemon.getEffectiveNature().getDisplayName()).setStyle(green)));
 
 		MutableComponent ability = Component.translatable("cobblemon.ui.info.ability").setStyle(dark_green)
 				.append(": ")
