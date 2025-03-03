@@ -352,8 +352,7 @@ public class List extends Subcommand {
 			// Checks the item isn't banned.
 			for (JsonElement bannedItem : bannedItems) {
 				ItemStack banned = CodecUtils.decodeItem(bannedItem);
-				if (banned.getItem().equals(item.getItem()) &&
-						ItemStack.isSameItemSameComponents(banned, item)) {
+				if (ItemStack.isSameItem(item, banned)) {
 					context.getSource().sendSystemMessage(Component.literal(Utils.formatPlaceholders(Gts.language.getBannedItem(),
 							0, item.getDisplayName().getString(), player.getDisplayName().getString(), null)));
 					return 1;
