@@ -7,7 +7,6 @@ import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import org.pokesplash.gts.Gts;
 import org.pokesplash.gts.command.superclass.Subcommand;
-import org.pokesplash.gts.permission.LuckPermsUtils;
 
 public class Debug extends Subcommand {
 
@@ -24,8 +23,8 @@ public class Debug extends Subcommand {
 		return Commands.literal("debug")
 				.requires(ctx -> {
 					if (ctx.isPlayer()) {
-						return LuckPermsUtils.hasPermission(ctx.getPlayer(),
-								Gts.permissions.getPermission("debug"));
+						return Gts.permissions.hasPermission(ctx.getPlayer(),
+								"debug");
 					} else {
 						return true;
 					}

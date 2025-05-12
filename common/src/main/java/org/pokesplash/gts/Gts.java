@@ -25,7 +25,7 @@ public class Gts
 	public static int debugTime = 10;
 	public static int ticksPerCheck = 20;
 	public static Config config;
-	public static final PermissionProvider permissions = new PermissionProvider();
+	public static PermissionProvider permissions;
 	public static ListingsProvider listings;
 	public static HistoryProvider history;
 	public static TimeoutProvider timeouts;

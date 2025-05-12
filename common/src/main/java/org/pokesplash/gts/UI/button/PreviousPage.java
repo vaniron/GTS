@@ -4,8 +4,8 @@ import ca.landonjw.gooeylibs2.api.button.Button;
 import ca.landonjw.gooeylibs2.api.button.linked.LinkType;
 import ca.landonjw.gooeylibs2.api.button.linked.LinkedPageButton;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.network.chat.Component;
 import org.pokesplash.gts.Gts;
+import org.pokesplash.gts.util.ColorUtil;
 
 public abstract class PreviousPage {
     public static Button getButton() {
@@ -13,7 +13,7 @@ public abstract class PreviousPage {
                 .display(Gts.language.getPreviousPageButtonItems())
                 .linkType(LinkType.Previous)
                 .with(DataComponents.CUSTOM_NAME,
-                        Component.literal(Gts.language.getPreviousPageButtonLabel()))
+                        ColorUtil.parse(Gts.language.getPreviousPageButtonLabel()))
                 .build();
     }
 }

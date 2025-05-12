@@ -19,6 +19,7 @@ import org.pokesplash.gts.UI.button.ManageListings;
 import org.pokesplash.gts.UI.button.*;
 import org.pokesplash.gts.UI.module.ListingInfo;
 import org.pokesplash.gts.enumeration.Sort;
+import org.pokesplash.gts.util.ColorUtil;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -48,7 +49,7 @@ public class ItemListings {
 		Button sortByPriceButton = GooeyButton.builder()
 				.display(Gts.language.getSortByPriceButtonItem())
 				.with(DataComponents.CUSTOM_NAME,
-						Component.literal(Gts.language.getSortByPriceButtonLabel()))
+						ColorUtil.parse(Gts.language.getSortByPriceButtonLabel()))
 				.onClick((action) -> {
 					ServerPlayer sender = action.getPlayer();
 					Page page = new ItemListings().getPage(Sort.PRICE);
@@ -59,7 +60,7 @@ public class ItemListings {
 		Button sortByNewestButton = GooeyButton.builder()
 				.display(Gts.language.getSortByNewestButtonItem())
 				.with(DataComponents.CUSTOM_NAME,
-						Component.literal(Gts.language.getSortByNewestButtonLabel()))
+						ColorUtil.parse(Gts.language.getSortByNewestButtonLabel()))
 				.onClick((action) -> {
 					ServerPlayer sender = action.getPlayer();
 					Page page = new ItemListings().getPage(Sort.DATE);
@@ -70,7 +71,7 @@ public class ItemListings {
 		Button sortByNameButton = GooeyButton.builder()
 				.display(Gts.language.getSortByNameButtonItem())
 				.with(DataComponents.CUSTOM_NAME,
-						Component.literal(Gts.language.getSortByNameButtonLabel()))
+						ColorUtil.parse(Gts.language.getSortByNameButtonLabel()))
 				.onClick((action) -> {
 					ServerPlayer sender = action.getPlayer();
 					Page page = new ItemListings().getPage(Sort.NAME);

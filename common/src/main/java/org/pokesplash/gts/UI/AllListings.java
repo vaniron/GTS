@@ -75,7 +75,7 @@ public class AllListings {
 				.build();
 
 		LinkedPage page = PaginationHelper.createPagesFromPlaceholders(template, buttons, null);
-		page.setTitle("§3" + Gts.language.getTitle());
+		page.setTitle(Gts.language.getTitle());
 
 		setPageTitle(page);
 

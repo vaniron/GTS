@@ -3,7 +3,6 @@ package org.pokesplash.gts.Listing;
 import com.cobblemon.mod.common.item.PokemonItem;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -37,7 +36,7 @@ public class PokemonListing extends Listing<Pokemon> {
 		super(UUID.fromString(other.getSellerUuid().toString()),
 				String.copyValueOf(other.getSellerName().toCharArray()),
 				other.getPrice(), true);
-		this.pokemon = other.getListing().saveToJSON(new JsonObject());
+		this.pokemon = Pokemon.getCODEC().encodeStart(JsonOps.INSTANCE, other.getListing()).getOrThrow();
 		super.id = UUID.fromString(other.getId().toString());
 		super.version = String.copyValueOf(other.getVersion().toCharArray());
 		super.setEndTime(other.getEndTime());
@@ -48,17 +47,23 @@ public class PokemonListing extends Listing<Pokemon> {
 		return Pokemon.getCODEC().decode(JsonOps.INSTANCE, pokemon).getOrThrow().getFirst();
 	}
 
+	@Override
+	public boolean isListingValid() {
+		return pokemon != null && pokemon.isJsonObject();
+	}
+
 	public JsonElement getListingAsJsonObject() {
 		return pokemon;
 	}
 
 	@Override
 	public MutableComponent getDisplayName() {
-		Style blue = Style.EMPTY.withColor(TextColor.parseColor("blue").getOrThrow());
-		Style dark_aqua = Style.EMPTY.withColor(TextColor.parseColor("dark_aqua").getOrThrow());
-		Style red = Style.EMPTY.withColor(TextColor.parseColor("red").getOrThrow());
-		Style yellow = Style.EMPTY.withColor(TextColor.parseColor("yellow").getOrThrow());
-		Style white = Style.EMPTY.withColor(TextColor.parseColor("white").getOrThrow());
+		Style base = Style.EMPTY.withItalic(false);
+		Style blue = base.withColor(TextColor.parseColor("blue").getOrThrow());
+		Style dark_aqua = base.withColor(TextColor.parseColor("dark_aqua").getOrThrow());
+		Style red = base.withColor(TextColor.parseColor("red").getOrThrow());
+		Style yellow = base.withColor(TextColor.parseColor("yellow").getOrThrow());
+		Style white = base.withColor(TextColor.parseColor("white").getOrThrow());
 		Pokemon pokemon = this.getListing();
 		boolean isShiny = pokemon.getShiny();
 		MutableComponent displayName = pokemon.getDisplayName().setStyle(isShiny ? yellow : dark_aqua);

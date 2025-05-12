@@ -20,7 +20,7 @@ import org.pokesplash.gts.history.HistoryItem;
 import org.pokesplash.gts.history.ItemHistoryItem;
 import org.pokesplash.gts.history.PlayerHistory;
 import org.pokesplash.gts.history.PokemonHistoryItem;
-import org.pokesplash.gts.util.Utils;
+import org.pokesplash.gts.util.ColorUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -53,17 +53,18 @@ public class History {
 
 				// Standard lore for any item.
 				List<Component> lore = new ArrayList<>();
-				lore.add(Component.literal(Gts.language.getSeller() + item.getSellerName()));
-				lore.add(Component.literal(Gts.language.getPrice() + item.getPriceAsString()));
-				lore.add(Component.literal(Gts.language.getBuyer() + item.getBuyerName()));
+
+				lore.add(ColorUtil.parse(Gts.language.getSeller() + item.getSellerName()));
+				lore.add(ColorUtil.parse(Gts.language.getPrice() + item.getPriceAsString()));
+				lore.add(ColorUtil.parse(Gts.language.getBuyer() + item.getBuyerName()));
 
 				String pattern = "d MMMM yyyy";
 				SimpleDateFormat format = new SimpleDateFormat(pattern);
 
-				lore.add(Component.literal(Gts.language.getSold_date() +
+				lore.add(ColorUtil.parse(Gts.language.getSold_date() +
 						format.format(new Date(item.getSoldDate()))));
 
-				Button button;
+				Button button = null;
 
 				// Pokemon specific lore and button.
 				if (item.isPokemon()) {
@@ -72,7 +73,7 @@ public class History {
 
 					button = GooeyButton.builder()
 							.display(PokemonItem.from(pokemonItem.getListing(), 1))
-							.with(DataComponents.CUSTOM_NAME, pokemonItem.getListing().getDisplayName())
+							.with(DataComponents.CUSTOM_NAME, pokemonItem.getDisplayName())
 							.with(DataComponents.LORE, new ItemLore(lore))
 							.build();
 				}
@@ -80,18 +81,20 @@ public class History {
 				else {
 					ItemHistoryItem itemHistoryItem = (ItemHistoryItem) item;
 
-					button = GooeyButton.builder()
-							.display(itemHistoryItem.getListing())
-							.with(DataComponents.CUSTOM_NAME,
-									Component.literal("§3" + Utils.capitaliseFirst(
-											itemHistoryItem.getListing().getDisplayName().getString())))
-							.with(DataComponents.LORE, new ItemLore(lore))
-							.with(DataComponents.HIDE_ADDITIONAL_TOOLTIP, Unit.INSTANCE)
-							.build();
+					if (itemHistoryItem.getListing() != null) {
+						button = GooeyButton.builder()
+								.display(itemHistoryItem.getListing())
+								.with(DataComponents.CUSTOM_NAME, itemHistoryItem.getDisplayName())
+								.with(DataComponents.LORE, new ItemLore(lore))
+								.with(DataComponents.HIDE_ADDITIONAL_TOOLTIP, Unit.INSTANCE)
+								.build();
+					}
 				}
 
 				// Adds the button to the list.
-				buttons.add(button);
+				if (button != null) {
+					buttons.add(button);
+				}
 			}
 		}
 
@@ -106,6 +109,7 @@ public class History {
 				.build();
 
 		LinkedPage page = PaginationHelper.createPagesFromPlaceholders(template, buttons, null);
+
 		page.setTitle(Gts.language.getHistoryTitle());
 
 		setPageTitle(page);

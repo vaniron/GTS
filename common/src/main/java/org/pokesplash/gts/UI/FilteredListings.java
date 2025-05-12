@@ -81,6 +81,7 @@ public class FilteredListings {
 				.build();
 
 		LinkedPage page = PaginationHelper.createPagesFromPlaceholders(template, buttons, null);
+
 		page.setTitle(Gts.language.getFilteredListingsTitle().replaceAll("%search%", searchValue));
 
 		setPageTitle(page, searchValue);
