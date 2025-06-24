@@ -262,6 +262,13 @@ public class List extends Subcommand {
 			minPrice += Gts.config.getMinPriceUltrabeast();
 		}
 
+		// If pokemon helds any item, prevent command.
+		if (!pokemon.heldItem().isEmpty()) {
+			context.getSource().sendSystemMessage(Component.literal(Utils.formatPlaceholders("Pokémon má held item, nelze prodat.",
+					minPrice, pokemon.getDisplayName().getString(), player.getDisplayName().getString(), null)));
+			return 1;
+		}
+
 		// If the Pokemon has a minimum price, add it.
 		java.util.List<PokemonPrices> minPrices = Gts.config.getCustomPokemonPrices();
 		for (PokemonPrices pokemonPrices : minPrices) {
