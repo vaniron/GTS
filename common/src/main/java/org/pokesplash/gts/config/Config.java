@@ -12,6 +12,7 @@ import org.pokesplash.gts.util.CodecUtils;
 import org.pokesplash.gts.util.Utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -44,6 +45,7 @@ public class Config extends Versioned {
 	private List<JsonElement> bannedItems; // A list of items that can not be sold
 	private List<PokemonPrices> customPokemonPrices; // A list of Pokemon with minimum prices.
 	private List<PokemonAspects> bannedPokemon; // A list of pokemon that can not be sold.
+	private List<String> bannedModNamespaces = Arrays.asList("sophisticatedbackpacks");
 
 	/**
 	 * Constructor to create a default config file.
@@ -78,6 +80,7 @@ public class Config extends Versioned {
 		bannedPokemon.add(new PokemonAspects());
 		discord = new Webhook();
 		showBreedable = false;
+		bannedModNamespaces = new ArrayList<>(Arrays.asList("sophisticatedbackpacks"));
 	}
 
 	/**
@@ -128,6 +131,7 @@ public class Config extends Versioned {
 						enablePermissionNodes = cfgOld.isEnablePermissionNodes();
 						discord = cfgOld.getDiscord() == null ? new Webhook() : cfgOld.getDiscord();
 						showBreedable = cfgOld.isShowBreedable();
+						bannedModNamespaces = new ArrayList<>(Arrays.asList("sophisticatedbackpacks"));
 
 						write();
 						Gts.LOGGER.info("Config successfully updated for GTS!");
@@ -157,6 +161,7 @@ public class Config extends Versioned {
 						customItemPrices = cfg.getCustomItemPrices();
 						customPokemonPrices = cfg.getCustomPokemonPrices();
 						bannedPokemon = cfg.getBannedPokemon();
+						bannedModNamespaces = cfg.getBannedModNamespaces() != null ? cfg.getBannedModNamespaces() : new ArrayList<>(Arrays.asList("sophisticatedbackpacks"));
 					}
 				});
 
@@ -366,5 +371,13 @@ public class Config extends Versioned {
 
 	public boolean isEnableAsyncSearches() {
 		return enableAsyncSearches;
+	}
+
+	public List<String> getBannedModNamespaces() {
+		return bannedModNamespaces;
+	}
+
+	public void setBannedModNamespaces(List<String> bannedModNamespaces) {
+		this.bannedModNamespaces = bannedModNamespaces != null ? bannedModNamespaces : new ArrayList<>();
 	}
 }
