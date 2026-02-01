@@ -2,6 +2,7 @@ package org.pokesplash.gts.command.subcommand;
 
 import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle;
+import com.cobblemon.mod.common.api.pokemon.labels.CobblemonPokemonLabels;
 import com.cobblemon.mod.common.api.storage.party.PlayerPartyStore;
 import com.cobblemon.mod.common.battles.BattleRegistry;
 import com.cobblemon.mod.common.pokemon.Pokemon;
@@ -254,13 +255,20 @@ public class List extends Subcommand {
 		}
 
 		// If Legendary, add the minimum price.
-		if (pokemon.isLegendary()) {
+		if (pokemon.isLegendary() || pokemon.isMythical()) {
 			minPrice += Gts.config.getMinPriceLegendary();
 		}
 
-		// If Ultrabeast, add the minimum price.
-		if (pokemon.isUltraBeast()) {
+		// If Ultrabeast or Paradox, add the minimum price.
+		if (pokemon.isUltraBeast() || pokemon.hasLabels(CobblemonPokemonLabels.PARADOX)) {
 			minPrice += Gts.config.getMinPriceUltrabeast();
+		}
+
+		// If pokemon helds any item, prevent command.
+		if (!pokemon.heldItem().isEmpty()) {
+			context.getSource().sendSystemMessage(Component.literal(Utils.formatPlaceholders("Pokémon má held item, nelze prodat.",
+					minPrice, pokemon.getDisplayName().getString(), player.getDisplayName().getString(), null)));
+			return 1;
 		}
 
 		// If the Pokemon has a minimum price, add it.
