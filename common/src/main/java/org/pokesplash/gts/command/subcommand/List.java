@@ -267,7 +267,7 @@ public class List extends Subcommand {
 		// If pokemon helds any item, prevent command.
 		if (!pokemon.heldItem().isEmpty()) {
 			context.getSource().sendSystemMessage(Component.literal(Utils.formatPlaceholders("Pokémon má held item, nelze prodat.",
-					minPrice, pokemon.getDisplayName().getString(), player.getDisplayName().getString(), null)));
+					minPrice, pokemon.getDisplayName(false).getString(), player.getDisplayName().getString(), null)));
 			return 1;
 		}
 
@@ -342,6 +342,7 @@ public class List extends Subcommand {
 
 		java.util.List<ItemPrices> minPrices = Gts.config.getCustomItemPrices();
 		java.util.List<JsonElement> bannedItems = Gts.config.getBannedItems();
+		java.util.List<String> bannedModNamespaces = Gts.config.getBannedModNamespaces();
 
 		// Checks there's an item in the players hand
 		try {
@@ -351,6 +352,16 @@ public class List extends Subcommand {
 			if (item == null) {
 				context.getSource().sendSystemMessage(Component.literal(Utils.formatPlaceholders(Gts.language.getNoItemInHand(),
 						0, null, player.getDisplayName().getString(), null)));
+				return 1;
+			}
+
+			// Check if the item's namespace is in the banned mod list
+			String itemNamespace = item.getItem().getDefaultInstance().getItem().toString().split(":")[0];
+			if (bannedModNamespaces.contains(itemNamespace)) {
+				context.getSource().sendSystemMessage(Component.literal(
+						Utils.formatPlaceholders(Gts.language.getBannedItem(),
+								0, item.getDisplayName().getString(), player.getDisplayName().getString(),
+								"This item is from a banned mod (" + itemNamespace + ").")));
 				return 1;
 			}
 
@@ -456,10 +467,10 @@ public class List extends Subcommand {
 			for (int i = 0; i < numberOfStacks; i++) {
 
 				int totalActiveListings = Gts.listings.getListingsByPlayer(player.getUUID()).size();
-				int totalExpiredListigs = Gts.listings.getExpiredListingsOfPlayer(player.getUUID()).size();
+				int totalExpiredListings = Gts.listings.getExpiredListingsOfPlayer(player.getUUID()).size();
 
 				// If they exceed max listings, prevent any more.
-				if (totalActiveListings + totalExpiredListigs >= Gts.config.getMaxListingsPerPlayer()) {
+				if (totalActiveListings + totalExpiredListings >= Gts.config.getMaxListingsPerPlayer()) {
 					context.getSource().sendSystemMessage(Component.literal(
 							Utils.formatPlaceholders(Gts.language.getMaximumListings(), 0, null,
 									context.getSource().getPlayer().getDisplayName().getString(), null)));

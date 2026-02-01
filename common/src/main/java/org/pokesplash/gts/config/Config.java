@@ -13,6 +13,7 @@ import org.pokesplash.gts.util.CodecUtils;
 import org.pokesplash.gts.util.Utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -47,6 +48,7 @@ public class Config {
 	private List<PokemonPrices> customPokemonPrices; // A list of Pokemon with minimum prices.
 	private List<PokemonAspects> bannedPokemon; // A list of pokemon that can not be sold.
     private List<String> removedModDescriptions;
+	private List<String> bannedModNamespaces = Arrays.asList("sophisticatedbackpacks"); // A list of complete banned mods
 
 	/**
 	 * Constructor to create a default config file.
@@ -81,6 +83,7 @@ public class Config {
 		bannedPokemon.add(new PokemonAspects());
 		discord = new Webhook();
 		showBreedable = false;
+		bannedModNamespaces = new ArrayList<>(Arrays.asList("sophisticatedbackpacks"));
         removedModDescriptions = new ArrayList<>();
         removedModDescriptions.add("simpletms");
 	}
@@ -212,4 +215,12 @@ public class Config {
     public List<String> getRemovedModDescriptions() {
         return removedModDescriptions;
     }
+
+	public List<String> getBannedModNamespaces() {
+		return bannedModNamespaces;
+	}
+
+	public void setBannedModNamespaces(List<String> bannedModNamespaces) {
+		this.bannedModNamespaces = bannedModNamespaces != null ? bannedModNamespaces : new ArrayList<>();
+	}
 }
