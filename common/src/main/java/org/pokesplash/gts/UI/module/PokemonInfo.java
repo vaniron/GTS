@@ -58,14 +58,20 @@ public abstract class PokemonInfo {
 		}
 		lore.add(Component.translatable("cobblemon.ui.info.type").setStyle(dark_green).append(":").append(types));
 
-		lore.add(Component.translatable("cobblemon.ui.info.nature").setStyle(dark_green).append(": ")
-				.append(Component.translatable(pokemon.getNature().getDisplayName()).setStyle(green)));
+		MutableComponent natureLine = Component.translatable("cobblemon.ui.info.nature").setStyle(dark_green).append(": ")
+				.append(Component.translatable(pokemon.getNature().getDisplayName()).setStyle(green));
+		if (Utils.hasMintedNature(pokemon)) {
+			natureLine.append(Component.literal(" (").setStyle(dark_green))
+					.append(Component.translatable(pokemon.getMintedNature().getDisplayName()).setStyle(yellow))
+					.append(Component.literal(")").setStyle(dark_green));
+		}
+		lore.add(natureLine);
 
 		MutableComponent ability = Component.translatable("cobblemon.ui.info.ability").setStyle(dark_green)
 				.append(": ")
 				.append(Component.translatable(pokemon.getAbility().getDisplayName()).setStyle(green));
 		if (Utils.isHA(pokemon)) {
-			ability.append(Component.literal(" §b(HA)"));
+			ability.append(Component.literal(" §b(HA)").setStyle(gold));
 		}
 		lore.add(ability);
 

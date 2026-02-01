@@ -316,6 +316,16 @@ public abstract class Utils {
 	}
 
 	/**
+	 * Checks if a Pokemon has minted nature.
+	 * @param pokemon The Pokemon to check.
+	 * @return true if the Pokemon has it's hidden ability.
+	 */
+	public static boolean hasMintedNature(Pokemon pokemon) {
+
+        return pokemon.getMintedNature() != null;
+    }
+
+	/**
 	 * Checks if a Pokemon has it's Hidden Ability.
 	 * @param pokemon The Pokemon to check.
 	 * @return true if the Pokemon has it's hidden ability.
