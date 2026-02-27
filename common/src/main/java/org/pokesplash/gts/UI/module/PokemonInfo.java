@@ -1,6 +1,7 @@
 package org.pokesplash.gts.UI.module;
 
 import com.cobblemon.mod.common.api.moves.Move;
+import com.cobblemon.mod.common.api.pokemon.stats.Stat;
 import com.cobblemon.mod.common.api.pokemon.stats.Stats;
 import com.cobblemon.mod.common.api.types.ElementalType;
 import com.cobblemon.mod.common.pokemon.Pokemon;
@@ -23,7 +24,23 @@ import java.util.Collection;
  */
 public abstract class PokemonInfo {
 
-	/**
+    private static Component createStatLine(Pokemon pokemon, String translationKey, Style style, Stat stat) {
+        // Safely grab the values, defaulting to 0 if they return null
+        Integer rawIv = pokemon.getIvs().get(stat);
+        int iv = (rawIv == null) ? 0 : rawIv;
+
+        Integer rawHt = pokemon.getIvs().getHyperTrainedIVs().get(stat);
+        int hyperTrained = (rawHt == null) ? 0 : rawHt;
+
+        Integer rawEv = pokemon.getEvs().get(stat);
+        int ev = (rawEv == null) ? 0 : rawEv;
+
+        // Construct and return the final formatted Component
+        return Component.translatable(translationKey).setStyle(style)
+                .append(" §8- §3IV: §a" + iv + " (" + hyperTrained + ") §cEV: §a" + ev);
+    }
+
+    /**
 	 * Create UI component lore for a give Pokemon (Gender, IVs, Nature, etc).
 	 * @param pokemon The Pokemon to create lore for.
 	 * @return The list of lore created.
@@ -93,35 +110,12 @@ public abstract class PokemonInfo {
 
 		lore.add(Component.translatable("cobblemon.ui.stats").setStyle(gray).append(": "));
 
-		lore.add(Component.translatable("cobblemon.ui.stats.hp").setStyle(light_purple)
-			.append(" §8- §3IV: §a" +
-				(pokemon.getIvs().get(Stats.HP) == null ? "0" :
-						pokemon.getIvs().get(Stats.HP))
-				+ " §cEV: §a" + (pokemon.getEvs().get(Stats.HP) == null ? "0" : pokemon.getEvs().get(Stats.HP))));
-		lore.add(Component.translatable("cobblemon.ui.stats.atk").setStyle(red)
-			.append(" §8- §3IV: §a" + (pokemon.getIvs().get(Stats.ATTACK) == null ? "0" :
-				+ pokemon.getIvs().get(Stats.ATTACK)) + " §cEV: §a" +
-				(pokemon.getEvs().get(Stats.ATTACK) == null ? "0" : pokemon.getEvs().get(Stats.ATTACK))));
-		lore.add(Component.translatable("cobblemon.ui.stats.def").setStyle(gold)
-			.append(" §8- §3IV: §a" + (pokemon.getIvs().get(Stats.DEFENCE) == null ? "0" :
-				+ pokemon.getIvs().get(Stats.DEFENCE)) + " §cEV: §a" +
-				(pokemon.getEvs().get(Stats.DEFENCE) == null ? "0" :
-						pokemon.getEvs().get(Stats.DEFENCE))));
-		lore.add(Component.translatable("cobblemon.ui.stats.sp_atk").setStyle(dark_purple)
-			.append(" §8- §3IV: §a" + (pokemon.getIvs().get(Stats.SPECIAL_ATTACK) == null ? "0" :
-				+ pokemon.getIvs().get(Stats.SPECIAL_ATTACK)) + " §cEV: §a" +
-				(pokemon.getEvs().get(Stats.SPECIAL_ATTACK) == null ? "0" :
-						pokemon.getEvs().get(Stats.SPECIAL_ATTACK))));
-		lore.add(Component.translatable("cobblemon.ui.stats.sp_def").setStyle(yellow)
-			.append(" §8- §3IV: §a" + (pokemon.getIvs().get(Stats.SPECIAL_DEFENCE) == null ? "0" :
-				+ pokemon.getIvs().get(Stats.SPECIAL_DEFENCE)) + " §cEV: §a" +
-				(pokemon.getEvs().get(Stats.SPECIAL_DEFENCE) == null ? "0" :
-						pokemon.getEvs().get(Stats.SPECIAL_DEFENCE))));
-		lore.add(Component.translatable("cobblemon.ui.stats.speed").setStyle(dark_aqua)
-			.append(" §8- §3IV: §a" + (pokemon.getIvs().get(Stats.SPEED) == null ? "0" :
-				+ pokemon.getIvs().get(Stats.SPEED)) + " §cEV: §a" +
-				(pokemon.getEvs().get(Stats.SPEED) == null ? "0" :
-						pokemon.getEvs().get(Stats.SPEED))));
+        lore.add(createStatLine(pokemon, "cobblemon.ui.stats.hp", light_purple, Stats.HP));
+        lore.add(createStatLine(pokemon, "cobblemon.ui.stats.atk", red, Stats.ATTACK));
+        lore.add(createStatLine(pokemon, "cobblemon.ui.stats.def", gold, Stats.DEFENCE));
+        lore.add(createStatLine(pokemon, "cobblemon.ui.stats.sp_atk", dark_purple, Stats.SPECIAL_ATTACK));
+        lore.add(createStatLine(pokemon, "cobblemon.ui.stats.sp_def", yellow, Stats.SPECIAL_DEFENCE));
+        lore.add(createStatLine(pokemon, "cobblemon.ui.stats.speed", dark_aqua, Stats.SPEED));
 
 		lore.add(Component.translatable("cobblemon.ui.stats.friendship").setStyle(dark_green)
 				.append(": §a" + pokemon.getFriendship()));
