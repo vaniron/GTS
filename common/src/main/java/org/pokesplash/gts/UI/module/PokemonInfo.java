@@ -24,21 +24,23 @@ import java.util.Collection;
  */
 public abstract class PokemonInfo {
 
-    private static Component createStatLine(Pokemon pokemon, String translationKey, Style style, Stat stat) {
-        // Safely grab the values, defaulting to 0 if they return null
-        Integer rawIv = pokemon.getIvs().get(stat);
-        int iv = (rawIv == null) ? 0 : rawIv;
+	private static Component createStatLine(Pokemon pokemon, String translationKey, Style style, Stat stat) {
+		// Safely grab IVs and EVs, defaulting to 0
+		Integer rawIv = pokemon.getIvs().get(stat);
+		int iv = (rawIv == null) ? 0 : rawIv;
 
-        Integer rawHt = pokemon.getIvs().getHyperTrainedIVs().get(stat);
-        int hyperTrained = (rawHt == null) ? 0 : rawHt;
+		Integer rawEv = pokemon.getEvs().get(stat);
+		int ev = (rawEv == null) ? 0 : rawEv;
 
-        Integer rawEv = pokemon.getEvs().get(stat);
-        int ev = (rawEv == null) ? 0 : rawEv;
+		// Check for HyperTrained IVs. If null, return an empty string.
+		// If present, format it with parentheses and a leading space.
+		Integer rawHt = pokemon.getIvs().getHyperTrainedIVs().get(stat);
+		String htDisplay = (rawHt == null) ? "" : " (" + rawHt + ")";
 
-        // Construct and return the final formatted Component
-        return Component.translatable(translationKey).setStyle(style)
-                .append(" §8- §3IV: §a" + iv + " (" + hyperTrained + ") §cEV: §a" + ev);
-    }
+		// Construct and return the final formatted Component
+		return Component.translatable(translationKey).setStyle(style)
+				.append(" §8- §3IV: §a" + iv + htDisplay + " §cEV: §a" + ev);
+	}
 
     /**
 	 * Create UI component lore for a give Pokemon (Gender, IVs, Nature, etc).
