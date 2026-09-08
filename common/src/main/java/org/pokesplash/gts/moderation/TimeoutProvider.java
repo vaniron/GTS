@@ -1,8 +1,10 @@
 package org.pokesplash.gts.moderation;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.pokesplash.gts.util.Utils;
 
+import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
@@ -94,8 +96,11 @@ public class TimeoutProvider {
     public void read() {
         Utils.readFileAsync(FILEPATH, FILENAME, e -> {
             Gson gson = Utils.newGson();
-            HashMap<String, Long> data = gson.fromJson(e, HashMap.class);
-            timeouts = data;
+            Type type = new TypeToken<HashMap<String, Long>>(){}.getType();
+            HashMap<String, Long> data = gson.fromJson(e, type);
+            if (data != null) {
+                timeouts = data;
+            }
         });
     }
 }
