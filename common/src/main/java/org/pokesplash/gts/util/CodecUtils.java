@@ -26,7 +26,12 @@ public abstract class CodecUtils {
      * @return The decoded JsonElement as an ItemStack.
      */
     public static ItemStack decodeItem(JsonElement json) {
-        return ItemStack.CODEC.decode(Gts.server.registryAccess().createSerializationContext(JsonOps.INSTANCE),
-                json).getOrThrow().getFirst();
+        try {
+            return ItemStack.CODEC.decode(Gts.server.registryAccess().createSerializationContext(JsonOps.INSTANCE),
+                    json).getOrThrow().getFirst();
+        } catch (Exception e) {
+            Gts.LOGGER.error("Could not decode item: " + json.getAsString());
+            return null;
+        }
     }
 }
